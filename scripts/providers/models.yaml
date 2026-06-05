@@ -267,6 +267,22 @@ providers:
         input_per_million: 7.5
         output_per_million: 60.0
         batch_support: true
+  deepseek:
+    env_var: DEEPSEEK_API_KEY
+    sdk: openai
+    default_model: deepseek-chat
+    realtime_multiplier: 1.0
+    models:
+      deepseek-chat:
+        display_name: DeepSeek V4 Flash
+        input_per_million: 0.3
+        output_per_million: 0.6
+        batch_support: true
+      deepseek-reasoner:
+        display_name: DeepSeek V4 Pro
+        input_per_million: 0.6
+        output_per_million: 2.4
+        batch_support: true
   anthropic:
     env_var: ANTHROPIC_API_KEY
     sdk: anthropic

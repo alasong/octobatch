@@ -57,8 +57,8 @@ try:
 except ImportError:
     ASTEVAL_AVAILABLE = False
 
-# Add parent directory to path for module imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add scripts directory to path for bare module imports
+sys.path.insert(0, str(Path(__file__).parent))
 
 from expression_evaluator import evaluate_expressions, get_expressions, SeededRandom
 
@@ -210,6 +210,9 @@ def _log_api_key_status(log_file: Path, mode_tag: str) -> None:
     elif provider == "anthropic":
         has_key = bool(os.environ.get("ANTHROPIC_API_KEY"))
         log_message(log_file, mode_tag, f"Anthropic API key: {'AVAILABLE' if has_key else 'MISSING'}")
+    elif provider == "deepseek":
+        has_key = bool(os.environ.get("DEEPSEEK_API_KEY"))
+        log_message(log_file, mode_tag, f"DeepSeek API key: {'AVAILABLE' if has_key else 'MISSING'}")
     else:
         log_message(log_file, mode_tag, f"Provider '{provider}' — key status unknown")
 
@@ -523,6 +526,7 @@ def check_prerequisites(config: dict | None = None, manifest: dict | None = None
         "gemini": ("GOOGLE_API_KEY", "export GOOGLE_API_KEY=your_key"),
         "openai": ("OPENAI_API_KEY", "export OPENAI_API_KEY=your_key"),
         "anthropic": ("ANTHROPIC_API_KEY", "export ANTHROPIC_API_KEY=your_key"),
+        "deepseek": ("DEEPSEEK_API_KEY", "export DEEPSEEK_API_KEY=your_key"),
     }
 
     # Collect all providers that could be needed
@@ -566,9 +570,10 @@ def check_prerequisites(config: dict | None = None, manifest: dict | None = None
             os.environ.get("GOOGLE_API_KEY")
             or os.environ.get("OPENAI_API_KEY")
             or os.environ.get("ANTHROPIC_API_KEY")
+            or os.environ.get("DEEPSEEK_API_KEY")
         )
         if not has_any_key:
-            return "No API key found. Set at least one of: GOOGLE_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY"
+            return "No API key found. Set at least one of: GOOGLE_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY, DEEPSEEK_API_KEY"
         return None
 
     # Check that each needed provider has its API key
@@ -7308,7 +7313,7 @@ def main():
     parser.add_argument(
         "--provider",
         type=str,
-        choices=["gemini", "openai", "anthropic"],
+        choices=["gemini", "openai", "anthropic", "deepseek"],
         help="Override provider from pipeline config"
     )
     parser.add_argument(

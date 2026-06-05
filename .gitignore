@@ -38,6 +38,10 @@ pipelines/*
 !pipelines/NPCDialog/
 !pipelines/*.md
 
+# Temporary evaluation artifacts
+design_project_overview.md
+plan_context.yaml
+
 # Miscellaneous
 _working/
 tmp/

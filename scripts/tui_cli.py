@@ -18,6 +18,9 @@ from pathlib import Path
 
 def main():
     """Main entry point."""
+    # Add scripts directory to path for bare module imports
+    sys.path.insert(0, str(Path(__file__).parent))
+
     # Load .env file from current directory or parents
     from dotenv import load_dotenv
     load_dotenv()

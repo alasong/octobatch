@@ -85,10 +85,14 @@ def get_provider(config: dict) -> LLMProvider:
         from .anthropic import AnthropicProvider
         return AnthropicProvider(config)
 
+    elif provider_name == "deepseek":
+        from .deepseek import DeepSeekProvider
+        return DeepSeekProvider(config)
+
     else:
         raise ValueError(
             f"Unknown provider: '{provider_name}'. "
-            f"Supported providers: gemini, openai, anthropic"
+            f"Supported providers: gemini, openai, anthropic, deepseek"
         )
 
 
