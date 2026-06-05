@@ -7129,9 +7129,13 @@ def main():
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
-    # Load .env file from current directory or parents
+    # Load .env file from project root or current directory
     from dotenv import load_dotenv
-    load_dotenv()
+    dotenv_path = Path(__file__).resolve().parent.parent / ".env"
+    if dotenv_path.exists():
+        load_dotenv(dotenv_path, override=False)
+    else:
+        load_dotenv()
 
     # Restore default SIGPIPE handling so piped output (e.g., | head) causes a
     # clean exit instead of a BrokenPipeError that marks the run as failed.
