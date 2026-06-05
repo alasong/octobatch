@@ -246,15 +246,10 @@ class HomeScreen(Screen):
         if not missing:
             warning_widget.update("")
             warning_widget.remove_class("visible")
-        elif len(missing) == 3:
-            warning_widget.update(
-                "[yellow]\u26a0[/] No API keys found. Set GOOGLE_API_KEY, OPENAI_API_KEY, or ANTHROPIC_API_KEY to get started."
-            )
-            warning_widget.add_class("visible")
         else:
             keys_str = ", ".join(missing)
             warning_widget.update(
-                f"[yellow]\u26a0[/] Missing API keys: {keys_str} (set these to use those providers)"
+                f"[yellow]\u26a0[/] Missing API keys: {keys_str}"
             )
             warning_widget.add_class("visible")
 
