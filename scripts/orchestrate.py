@@ -583,7 +583,16 @@ def check_prerequisites(config: dict | None = None, manifest: dict | None = None
         if key_info:
             env_var, hint = key_info
             if not os.environ.get(env_var):
-                missing.append(f"{env_var} not set (needed for {provider_name}). {hint}")
+                # Try loading .env from project root as fallback
+                try:
+                    _dotenv_path = Path(__file__).resolve().parent.parent / ".env"
+                    if _dotenv_path.exists():
+                        from dotenv import load_dotenv
+                        load_dotenv(_dotenv_path, override=True)
+                except Exception:
+                    pass
+                if not os.environ.get(env_var):
+                    missing.append(f"{env_var} not set (needed for {provider_name}). {hint}")
 
     if missing:
         return "; ".join(missing)
@@ -7133,7 +7142,7 @@ def main():
     from dotenv import load_dotenv
     dotenv_path = Path(__file__).resolve().parent.parent / ".env"
     if dotenv_path.exists():
-        load_dotenv(dotenv_path, override=False)
+        load_dotenv(dotenv_path, override=True)
     else:
         load_dotenv()
 
